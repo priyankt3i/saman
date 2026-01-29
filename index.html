@@ -7,266 +7,272 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        /* Base page setup */
+        :root {
+            --sidebar-bg: #1e293b;
+            --main-bg: #ffffff;
+            --text-dark: #0f172a;
+            --text-light: #64748b;
+            --accent: #3b82f6;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f3f4f6;
-            color: #1f2937;
+            background-color: #f1f5f9;
+            margin: 0;
+            padding: 0;
         }
 
-        /* Essential Print Styles to ensure PDF fidelity */
-        @media print {
-            body {
-                background-color: white;
-                -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important;
-            }
-            .no-print {
-                display: none !important;
-            }
-            .resume-container {
-                box-shadow: none !important;
-                margin: 0 !important;
-                width: 100% !important;
-                max-width: none !important;
-            }
-            /* Prevent page breaks inside sections */
-            section {
-                page-break-inside: avoid;
-            }
-            @page {
-                margin: 0.5cm;
-                size: auto;
-            }
-        }
-
-        .resume-container {
-            max-width: 850px;
-            margin: 40px auto;
+        /* The A4 Container */
+        .resume-page {
+            width: 210mm;
+            height: 297mm;
+            margin: 20px auto;
             background: white;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
-            display: flex;
-            min-height: 1100px;
+            display: grid;
+            grid-template-columns: 75mm 135mm;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
         }
 
+        /* Sidebar Styling */
         .sidebar {
-            width: 32%;
-            background-color: #1e293b;
+            background-color: var(--sidebar-bg);
             color: #f8fafc;
-            padding: 40px 25px;
+            padding: 35px 25px;
+            height: 100%;
         }
 
+        /* Main Content Styling */
         .main-content {
-            width: 68%;
-            padding: 40px 40px;
+            background-color: var(--main-bg);
+            padding: 35px 35px;
+            height: 100%;
         }
 
-        .section-title {
-            border-bottom: 2px solid #e2e8f0;
-            padding-bottom: 8px;
-            margin-bottom: 16px;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            font-weight: 700;
-            font-size: 0.875rem;
-            color: #334155;
+        /* Typography fixes for print density */
+        h1 { font-size: 26pt; line-height: 1.1; margin-bottom: 4pt; }
+        h2 { font-size: 14pt; color: var(--accent); margin-bottom: 15pt; }
+        h3 { 
+            font-size: 10pt; 
+            text-transform: uppercase; 
+            letter-spacing: 1px; 
+            border-bottom: 1.5pt solid #e2e8f0;
+            padding-bottom: 4pt;
+            margin-bottom: 10pt;
+            margin-top: 15pt;
+            color: var(--text-dark);
         }
 
-        .sidebar-title {
+        .sidebar-heading {
+            font-size: 8.5pt;
             text-transform: uppercase;
-            letter-spacing: 0.1em;
-            font-weight: 600;
-            font-size: 0.75rem;
+            letter-spacing: 1.2px;
             color: #94a3b8;
-            margin-bottom: 12px;
-            margin-top: 32px;
-        }
-
-        .job-title {
-            font-weight: 700;
-            color: #0f172a;
-        }
-
-        .company-name {
+            margin-bottom: 8pt;
+            margin-top: 20pt;
             font-weight: 600;
-            color: #475569;
         }
 
-        .date-location {
-            font-size: 0.8rem;
-            color: #64748b;
-            margin-bottom: 8px;
-        }
+        .text-small { font-size: 8.5pt; line-height: 1.4; }
+        .text-body { font-size: 9.5pt; line-height: 1.5; color: #334155; }
 
-        ul.bullets {
-            list-style-type: none;
+        ul.bullet-list {
+            list-style: none;
             padding-left: 0;
+            margin-top: 5pt;
         }
-
-        ul.bullets li {
+        ul.bullet-list li {
             position: relative;
-            padding-left: 1.25rem;
-            margin-bottom: 6px;
-            font-size: 0.9rem;
-            line-height: 1.5;
+            padding-left: 12pt;
+            margin-bottom: 4pt;
+            font-size: 9pt;
+            line-height: 1.4;
         }
-
-        ul.bullets li::before {
+        ul.bullet-list li::before {
             content: "•";
             position: absolute;
             left: 0;
-            color: #3b82f6;
+            color: var(--accent);
             font-weight: bold;
+        }
+
+        .skill-tag {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 3pt 6pt;
+            border-radius: 4px;
+            display: inline-block;
+            margin: 2pt;
+            font-size: 7.5pt;
+        }
+
+        /* Print Override */
+        @media print {
+            body { background: none; margin: 0; padding: 0; }
+            .no-print { display: none !important; }
+            .resume-page {
+                margin: 0 !important;
+                box-shadow: none !important;
+                width: 210mm;
+                height: 297mm;
+                page-break-after: avoid;
+            }
+            @page {
+                size: A4;
+                margin: 0;
+            }
+        }
+
+        .download-bar {
+            max-width: 210mm;
+            margin: 20px auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
     </style>
 </head>
-<body class="p-4 md:p-10">
+<body>
 
-    <!-- Action Bar -->
-    <div class="max-w-[850px] mx-auto mb-6 flex justify-between items-center no-print">
-        <h2 class="text-gray-500 font-medium italic">Resume Preview</h2>
-        <button onclick="window.print()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold shadow-md transition-all flex items-center gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-            </svg>
+    <div class="download-bar no-print">
+        <p class="text-slate-500 font-medium">Resume Preview (Fixed A4 Layout)</p>
+        <button onclick="window.print()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-bold shadow-lg transition-all">
             Download PDF
         </button>
     </div>
 
-    <!-- Resume Container -->
-    <div class="resume-container">
-        
-        <!-- Sidebar -->
+    <div class="resume-page">
+        <!-- LEFT SIDEBAR -->
         <aside class="sidebar">
-            <div class="mb-8">
-                <h1 class="text-3xl font-bold leading-tight uppercase tracking-tighter">Saman<br>Seyfaei</h1>
-                <p class="text-blue-400 font-medium mt-2">Banking & Fraud Operations</p>
+            <div class="mb-6">
+                <h1 class="font-bold uppercase tracking-tighter">Saman<br>Seyfaei</h1>
+                <p class="text-blue-400 font-semibold text-sm mt-1">Banking & Fraud Operations</p>
             </div>
 
-            <div class="space-y-4 text-sm">
-                <div class="flex items-center gap-3">
-                    <span class="text-blue-300">📧</span>
-                    <span>samseifaee@gmail.com</span>
-                </div>
-                <div class="flex items-center gap-3">
-                    <span class="text-blue-300">📱</span>
-                    <span>978-881-4835</span>
-                </div>
-                <div class="flex items-center gap-3">
-                    <span class="text-blue-300">📍</span>
-                    <span>Concord, MA 01742</span>
-                </div>
+            <div class="space-y-3 text-small">
+                <div class="flex items-center gap-2"><span>✉️</span> samseifaee@gmail.com</div>
+                <div class="flex items-center gap-2"><span>📱</span> 978-881-4835</div>
+                <div class="flex items-center gap-2"><span>📍</span> Concord, MA 01742</div>
             </div>
 
-            <h3 class="sidebar-title">Core Expertise</h3>
-            <ul class="space-y-2 text-sm">
-                <li class="bg-slate-700/50 p-2 rounded">Fraud Identification</li>
-                <li class="bg-slate-700/50 p-2 rounded">Transaction Review</li>
-                <li class="bg-slate-700/50 p-2 rounded">Case Escalation</li>
-                <li class="bg-slate-700/50 p-2 rounded">Banking Compliance</li>
-                <li class="bg-slate-700/50 p-2 rounded">Data Accuracy</li>
-                <li class="bg-slate-700/50 p-2 rounded">Risk Mitigation</li>
-            </ul>
-
-            <h3 class="sidebar-title">Technical Skills</h3>
-            <div class="flex flex-wrap gap-2 text-xs">
-                <span class="bg-blue-900/40 border border-blue-400/30 px-2 py-1 rounded">Excel (Advanced)</span>
-                <span class="bg-blue-900/40 border border-blue-400/30 px-2 py-1 rounded">Microsoft Suite</span>
-                <span class="bg-blue-900/40 border border-blue-400/30 px-2 py-1 rounded">AutoCAD</span>
-                <span class="bg-blue-900/40 border border-blue-400/30 px-2 py-1 rounded">Revit</span>
-                <span class="bg-blue-900/40 border border-blue-400/30 px-2 py-1 rounded">Photoshop</span>
+            <div class="sidebar-heading">Core Expertise</div>
+            <div class="space-y-2">
+                <div class="text-xs bg-slate-800 p-2 rounded border-l-2 border-blue-500">Fraud Identification</div>
+                <div class="text-xs bg-slate-800 p-2 rounded border-l-2 border-blue-500">Transaction Review</div>
+                <div class="text-xs bg-slate-800 p-2 rounded border-l-2 border-blue-500">Banking Compliance</div>
+                <div class="text-xs bg-slate-800 p-2 rounded border-l-2 border-blue-500">Risk Mitigation</div>
+                <div class="text-xs bg-slate-800 p-2 rounded border-l-2 border-blue-500">Case Escalation</div>
             </div>
 
-            <h3 class="sidebar-title">Education</h3>
+            <div class="sidebar-heading">Technical Skills</div>
+            <div class="flex flex-wrap">
+                <span class="skill-tag">Excel (Advanced)</span>
+                <span class="skill-tag">Microsoft Suite</span>
+                <span class="skill-tag">AutoCAD</span>
+                <span class="skill-tag">Revit</span>
+                <span class="skill-tag">Photoshop</span>
+            </div>
+
+            <div class="sidebar-heading">Education</div>
             <div class="mb-4">
-                <p class="font-bold text-sm">B.S. Architectural Engineering</p>
-                <p class="text-xs text-slate-400">Azad University of Sadra</p>
-                <p class="text-xs text-slate-400 italic">2014 – 2017</p>
+                <p class="font-bold text-xs uppercase">B.S. Architectural Engineering</p>
+                <p class="text-[7pt] text-slate-400">Azad University of Sadra | 2014 – 2017</p>
             </div>
             <div>
-                <p class="font-bold text-sm">Associate Degree Architecture</p>
-                <p class="text-xs text-slate-400">Azad University of Zarghan</p>
-                <p class="text-xs text-slate-400 italic">2011 – 2014</p>
+                <p class="font-bold text-xs uppercase">Associate in Architecture</p>
+                <p class="text-[7pt] text-slate-400">Azad University of Zarghan | 2011 – 2014</p>
             </div>
         </aside>
 
-        <!-- Main Body -->
+        <!-- MAIN CONTENT -->
         <main class="main-content">
-            
-            <section class="mb-8">
-                <h3 class="section-title">Professional Summary</h3>
-                <p class="text-sm leading-relaxed text-gray-600">
-                    Results-driven Banking Professional with a background in precision-oriented engineering, now specializing in transaction review, fraud detection, and dispute resolution. Proven ability to identify unauthorized activities and mitigate financial risk within highly regulated environments. Committed to maintaining absolute data confidentiality and operational excellence.
+            <section>
+                <h3>Professional Summary</h3>
+                <p class="text-body">
+                    Analytical Banking Professional with a background in precision engineering, specializing in transaction review and fraud detection. Proven ability to identify unauthorized activities and mitigate financial risk within regulated environments. Committed to absolute data confidentiality and operational excellence.
                 </p>
             </section>
 
-            <section class="mb-8">
-                <h3 class="section-title">Professional Experience</h3>
+            <section>
+                <h3>Professional Experience</h3>
                 
-                <!-- Role 1 -->
-                <div class="mb-6">
-                    <div class="flex justify-between items-baseline">
-                        <span class="job-title text-lg">Relationship Banker | Banking Operations</span>
-                        <span class="text-sm font-semibold text-blue-600">July 2025 – Present</span>
+                <div class="mb-5">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="font-bold text-slate-900">Relationship Banker | Banking Operations</span>
+                            <div class="text-blue-600 font-semibold text-xs">Bank of America</div>
+                        </div>
+                        <span class="text-[8pt] font-bold text-slate-500">July 2025 – Present</span>
                     </div>
-                    <div class="company-name mb-2">Bank of America</div>
-                    <ul class="bullets">
+                    <ul class="bullet-list">
                         <li>Audit and process complex customer transactions in strict adherence to federal regulations and internal bank policies.</li>
-                        <li>Proactively identify, document, and escalate potential fraud cases and unauthorized account discrepancies to the risk management team.</li>
+                        <li>Identify, document, and escalate potential fraud cases and unauthorized account discrepancies to risk management.</li>
                         <li>Utilize internal analytical systems to monitor account movements, ensuring 100% accuracy in data entry and decision-making.</li>
-                        <li>Collaborate with cross-functional fraud, operations, and compliance teams to resolve transaction disputes efficiently.</li>
-                        <li>consistently meet or exceed stringent productivity and quality standards in a fast-paced, regulated banking environment.</li>
+                        <li>Collaborate with cross-functional teams to resolve transaction disputes efficiently.</li>
                     </ul>
                 </div>
 
-                <!-- Role 2 -->
-                <div class="mb-6">
-                    <div class="flex justify-between items-baseline">
-                        <span class="job-title text-lg">Counter Manager</span>
-                        <span class="text-sm font-semibold text-gray-500">Oct 2021 – July 2025</span>
+                <div class="mb-5">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="font-bold text-slate-900">Counter Manager</span>
+                            <div class="text-slate-600 font-semibold text-xs">Nordstrom (Creed)</div>
+                        </div>
+                        <span class="text-[8pt] font-bold text-slate-500">Oct 2021 – July 2025</span>
                     </div>
-                    <div class="company-name mb-2">Nordstrom (Creed)</div>
-                    <ul class="bullets">
+                    <ul class="bullet-list">
                         <li>Directed daily operations and inventory management, maintaining 100% accuracy in stock reconciliation and financial reporting.</li>
                         <li>Analyzed performance metrics to exceed sales targets and build high-retention customer relationships.</li>
                         <li>Ensured full operational compliance with corporate standards and security protocols.</li>
                     </ul>
                 </div>
 
-                <!-- Role 3 -->
-                <div class="mb-6">
-                    <div class="flex justify-between items-baseline">
-                        <span class="job-title text-lg">Assistant Project Manager</span>
-                        <span class="text-sm font-semibold text-gray-500">Dec 2017 – Aug 2021</span>
+                <div class="mb-5">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="font-bold text-slate-900">Assistant Project Manager</span>
+                            <div class="text-slate-600 font-semibold text-xs">Mehrazan Engineering</div>
+                        </div>
+                        <span class="text-[8pt] font-bold text-slate-500">Dec 2017 – Aug 2021</span>
                     </div>
-                    <div class="company-name mb-2">Mehrazan Engineering</div>
-                    <ul class="bullets">
+                    <ul class="bullet-list">
                         <li>Spearheaded project documentation and milestone tracking to ensure deadlines and quality standards were met.</li>
                         <li>Liaised between stakeholders and technical teams to address complex project requirements and resource allocation.</li>
-                        <li>Produced comprehensive status reports for leadership, focusing on process optimization and accuracy.</li>
+                        <li>Produced comprehensive status reports for leadership, focusing on process optimization.</li>
                     </ul>
                 </div>
             </section>
 
             <section>
-                <h3 class="section-title">Professional Certifications</h3>
-                <div class="grid grid-cols-2 gap-4">
-                    <div class="text-sm">
-                        <span class="font-bold block">Anti-Money Laundering (AML) Basics</span>
-                        <span class="text-gray-500 italic">Internal Training - Bank of America</span>
+                <h3>Certifications</h3>
+                <div class="grid grid-cols-2 gap-4 mt-2">
+                    <div class="p-2 border border-slate-100 rounded">
+                        <p class="font-bold text-xs">Anti-Money Laundering (AML)</p>
+                        <p class="text-[7pt] italic text-slate-500">Bank of America Training</p>
                     </div>
-                    <div class="text-sm">
-                        <span class="font-bold block">Regulatory Compliance Suite</span>
-                        <span class="text-gray-500 italic">Federal Banking Standards</span>
+                    <div class="p-2 border border-slate-100 rounded">
+                        <p class="font-bold text-xs">Regulatory Compliance Suite</p>
+                        <p class="text-[7pt] italic text-slate-500">Federal Banking Standards</p>
                     </div>
                 </div>
             </section>
         </main>
     </div>
 
-    <!-- Helpful Note for User -->
-    <div class="max-w-[850px] mx-auto mt-6 bg-blue-50 p-4 rounded-lg border border-blue-200 no-print">
-        <p class="text-sm text-blue-800">
-            <strong>Pro-Tip for PDF:</strong> When the print window opens, set <strong>Margins</strong> to "None" or "Default" and ensure <strong>"Background Graphics"</strong> is checked to keep the sidebar color intact.
+    <!-- Instructions -->
+    <div class="download-bar no-print bg-amber-50 border border-amber-200 p-4 rounded-lg">
+        <p class="text-xs text-amber-800 leading-relaxed">
+            <strong>One-Page Guarantee:</strong> This layout is hard-coded to 297mm height. When printing: <br>
+            1. Set <strong>Margins</strong> to "None". <br>
+            2. Set <strong>Scale</strong> to "100" or "Fit to Page". <br>
+            3. Ensure <strong>Background Graphics</strong> is checked.
         </p>
     </div>
 
